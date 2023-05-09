@@ -1,6 +1,7 @@
-import { create, all, BigNumber } from "mathjs";
+import { create, all, BigNumber, Infinity as MathJSInfinity } from "mathjs";
 
 import { G, M_S, L_S, Mag_S, PC } from "./constants";
+import { ComputeResult } from "./types";
 
 const math = create(all, { number: "BigNumber", precision: 6 });
 
@@ -53,36 +54,32 @@ export const compute = (
   T: BigNumber,
   M_guess: BigNumber,
   alpha: BigNumber,
-  mag_1: BigNumber,
-  mag_2: BigNumber
-) => {
+  mag_1: number,
+  mag_2: number
+): ComputeResult => {
   // Semi-major axis of the orbit
   // a_i = nthRoot(T^2 * G * M_guess / (pi^2 * 4), 3)
-  const a_i = nthRoot(
-    T.pow(2).times(G).times(M_guess).div(bignumber(Math.PI).pow(2).times(4)),
-    3
-  ) as number;
+  const a_i = bignumber(
+    nthRoot(
+      T.pow(2).times(G).times(M_guess).div(bignumber(Math.PI).pow(2).times(4)),
+      3
+    ) as number
+  );
 
   // Distance to the star
   // d_i = (a_i / 2) / tan(alpha / 2)
-  const d_i: BigNumber = bignumber(a_i)
+  const d_i: BigNumber = a_i
     .div(2)
     .div(math.tan(math.unit(alpha.div(2), "deg")));
   const d_i_pc = d_i.div(PC);
 
   // Absolute magnitude of the primary star
   // Mag_1 = mag_1 + 5 - 5 * log10(d_i_pc)
-  const Mag_1 = math.round(
-    mag_1.toNumber() + 5 - 5 * (math.log10(d_i_pc) as any),
-    4
-  );
+  const Mag_1 = math.round(mag_1 + 5 - 5 * (math.log10(d_i_pc) as any), 4);
 
   // Absolute magnitude of the secondary star
   // Mag_2 = mag_2 + 5 - 5 * log10(d_i_pc)
-  const Mag_2 = math.round(
-    mag_2.toNumber() + 5 - 5 * (math.log10(d_i_pc) as any),
-    4
-  );
+  const Mag_2 = math.round(mag_2 + 5 - 5 * (math.log10(d_i_pc) as any), 4);
 
   // Luminosity of the primary star
   // L_1 = L_S * 10^((Mag_S - Mag_1) / 2.5)
@@ -144,4 +141,87 @@ export const compute = (
     M_1_2_MS,
     delta,
   };
+};
+
+export const findBestGuess = (
+  initialGuess: BigNumber,
+  T: BigNumber,
+  // M_guess: BigNumber,
+  alpha: BigNumber,
+  mag_1: number,
+  mag_2: number,
+  maxIterations: number = 10
+) => {
+  const targetDelta = bignumber(1);
+  let currentGuess = initialGuess;
+  let result = compute(T, currentGuess, alpha, mag_1, mag_2);
+  let delta = result.delta.abs();
+  let iteration = 0;
+
+  let lowerBound = bignumber(-Infinity);
+  let upperBound = bignumber(Infinity);
+
+  let previousDelta = bignumber(delta);
+  let previousGuess = bignumber(0);
+
+  let results = [{ M_guess: currentGuess, ...result }];
+
+  /*
+  while (delta.gt(targetDelta) && iteration < maxIterations) {
+    // we still have a delta > 1%
+
+    if (delta.gt(previousDelta)) {
+
+    }
+
+
+
+    // if (delta.gte(previousDelta)) {
+    //   const adjustment = previousGuess.plus(currentGuess).div(4);
+    //   currentGuess = result.delta.gt(0)
+    //     ? previousGuess.plus(adjustment)
+    //     : previousGuess.minus(adjustment);
+    // } else {
+    //   previousGuess = currentGuess;
+
+    if (result.delta.gt(0)) {
+      console.log("D > 0 - now I should be here");
+      //lowerBound = currentGuess;
+      currentGuess = result.M_1_2; //upperBound.eq(Infinity)
+      // ? result.M_1_2
+      // : lowerBound.plus(upperBound).div(2);
+      console.log("using", currentGuess.toString(), "as the new guess");
+    } else {
+      console.log("D < 0 - I'm clearly here");
+      // upperBound = currentGuess;
+      currentGuess = previousGuess.times(2);
+    }
+    //}
+
+    result = compute(T, currentGuess, alpha, mag_1, mag_2);
+    previousDelta = delta;
+    delta = result.delta.abs();
+
+    results.push({ M_guess: currentGuess, ...result });
+    iteration++;
+  }*/
+
+  while (delta.gt(targetDelta) && iteration < maxIterations) {
+    if (result.delta.gt(0)) {
+      lowerBound = currentGuess;
+      currentGuess = upperBound.eq(Infinity)
+        ? result.M_1_2
+        : lowerBound.plus(upperBound).div(2);
+    } else {
+      upperBound = currentGuess;
+      currentGuess = lowerBound.plus(upperBound).div(2);
+    }
+
+    result = compute(T, currentGuess, alpha, mag_1, mag_2);
+    delta = result.delta.abs();
+    results.push({ M_guess: currentGuess, ...result });
+    iteration++;
+  }
+
+  return results;
 };
