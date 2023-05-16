@@ -120,21 +120,23 @@ export default function App() {
 
         <div>
           <Heading>Iterace výpočtů</Heading>
-          {results.map((result, index) => {
-            const finished =
-              (math.compare(result.delta.abs(), 1) as number) <= 0;
+          <div className="flex justify-evenly flex-wrap w-11/12">
+            {results.map((result, index) => {
+              const finished =
+                (math.compare(result.delta.abs(), 1) as number) <= 0;
 
-            return (
-              <IterationCard
-                key={index}
-                index={index}
-                finished={finished}
-                iteration={result}
-                expanded={expandedCard === index}
-                expandToggle={(index) => setExpandedCard(index)}
-              />
-            );
-          })}
+              return (
+                <IterationCard
+                  key={index}
+                  index={index}
+                  finished={finished}
+                  iteration={result}
+                  expanded={expandedCard === index}
+                  expandToggle={(index) => setExpandedCard(index)}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

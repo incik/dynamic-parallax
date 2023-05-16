@@ -22,7 +22,7 @@ export const IterationCard: FC<ResultRecordProps> = ({
     <div
       className={`card ${
         finished ? "bg-primary text-primary-content" : "bg-base-100" //[#88dc88]
-      } shadow-sm mb-2`}
+      } shadow-sm mb-2 ${!expanded && "w-1/2"}`}
       key={`iteration-${index}`}
     >
       <div className="indicator w-auto">
