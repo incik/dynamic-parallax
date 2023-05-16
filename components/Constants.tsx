@@ -5,7 +5,6 @@ import { format } from "mathjs";
 export const Constants = () => {
   return (
     <>
-      <h2 className="text-lg font-bold mb-1 pl-2">Konstanty</h2>
       <div className="stats shadow">
         <div className="stat">
           <div className="stat-title">
