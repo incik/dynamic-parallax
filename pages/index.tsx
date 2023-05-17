@@ -58,10 +58,10 @@ export default function App() {
         ? sessionResults.length > 0
           ? sessionResults
           : [
-              {
+              /* {
                 M_guess: initialGuess,
                 ...compute(staticData.T, initialGuess, alpha, mag_1, mag_2),
-              },
+              }, */
             ]
         : findBestGuess(
             initialGuess,
@@ -73,7 +73,7 @@ export default function App() {
           )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+  }, [mode, a, b, observedFor, mag_1, mag_2]);
 
   return (
     <div className="App bg-base-300">
@@ -82,7 +82,7 @@ export default function App() {
       </Head>
       <Header />
 
-      <div className="container mx-auto">
+      <div className="container mx-auto mt-8">
         <div className="container mx-auto flex flex-col lg:flex-row justify-evenly pb-4">
           <div className="flex flex-col lg:w-5/12 mb-4">
             <Heading>Pozorování</Heading>

@@ -1,6 +1,6 @@
 import mathjs, { format } from "mathjs";
 import { Symbol } from "./Symbol";
-import { FC, ReactNode } from "react";
+import { FC, Fragment, ReactNode } from "react";
 import { ComputedValue } from "./ComputedValue";
 import { ResultRecord } from "@/lib/types";
 
@@ -49,13 +49,21 @@ export const ResultsTable: FC<ResultsTableProps> = ({
         </tr>
       </thead>
       <tbody>
+        {results.length === 0 && (
+          <tr>
+            <td colSpan={4} className="text-center">
+              <p className="text-sm text-gray-500">
+                Zatím nebyly provedeny žádné výpočty.
+              </p>
+            </td>
+          </tr>
+        )}
         {results.map((result, index) => {
           const finished = (math.compare(result.delta.abs(), 1) as number) <= 0;
 
           return (
-            <>
+            <Fragment key={index}>
               <tr
-                key={index}
                 onClick={(_) => setExpandedCard(index)}
                 className="cursor-pointer group"
               >
@@ -188,7 +196,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({
                   </td>
                 </tr>
               )}
-            </>
+            </Fragment>
           );
         })}
       </tbody>

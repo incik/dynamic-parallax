@@ -15,11 +15,11 @@ export const Header = () => {
       <div className="navbar-start">
         <Logo />
       </div>
-      <div className="navbar-center">
-        <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-xl">
+      <div className="text-center">
+        <div className="flex-1 md:whitespace-nowrap">
+          <span className="font-bold break-words sm:break-keep text-sm sm:text-xl ">
             Dynamická paralaxa
-          </a>
+          </span>
         </div>
       </div>
       <div className="navbar-end">
@@ -27,7 +27,7 @@ export const Header = () => {
           <ul className="menu menu-horizontal px-1">
             <li>
               <button
-                data-toggle-theme="light,halloween"
+                data-toggle-theme="halloween,light"
                 data-act-class="ACTIVECLASS"
               >
                 ☀️ / 🌗

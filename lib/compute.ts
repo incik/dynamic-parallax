@@ -150,7 +150,6 @@ export const compute = (
 export const findBestGuess = (
   initialGuess: BigNumber,
   T: BigNumber,
-  // M_guess: BigNumber,
   alpha: BigNumber,
   mag_1: number,
   mag_2: number,
@@ -162,65 +161,10 @@ export const findBestGuess = (
   let delta = result.delta.abs();
   let iteration = 0;
 
-  let lowerBound = bignumber(-Infinity);
-  let upperBound = bignumber(Infinity);
-
-  let previousDelta = bignumber(delta);
-  let previousGuess = bignumber(0);
-
   let results = [{ M_guess: currentGuess, ...result }];
 
-  /*
   while (delta.gt(targetDelta) && iteration < maxIterations) {
-    // we still have a delta > 1%
-
-    if (delta.gt(previousDelta)) {
-
-    }
-
-
-
-    // if (delta.gte(previousDelta)) {
-    //   const adjustment = previousGuess.plus(currentGuess).div(4);
-    //   currentGuess = result.delta.gt(0)
-    //     ? previousGuess.plus(adjustment)
-    //     : previousGuess.minus(adjustment);
-    // } else {
-    //   previousGuess = currentGuess;
-
-    if (result.delta.gt(0)) {
-      console.log("D > 0 - now I should be here");
-      //lowerBound = currentGuess;
-      currentGuess = result.M_1_2; //upperBound.eq(Infinity)
-      // ? result.M_1_2
-      // : lowerBound.plus(upperBound).div(2);
-      console.log("using", currentGuess.toString(), "as the new guess");
-    } else {
-      console.log("D < 0 - I'm clearly here");
-      // upperBound = currentGuess;
-      currentGuess = previousGuess.times(2);
-    }
-    //}
-
-    result = compute(T, currentGuess, alpha, mag_1, mag_2);
-    previousDelta = delta;
-    delta = result.delta.abs();
-
-    results.push({ M_guess: currentGuess, ...result });
-    iteration++;
-  }*/
-
-  while (delta.gt(targetDelta) && iteration < maxIterations) {
-    if (result.delta.gt(0)) {
-      lowerBound = currentGuess;
-      currentGuess = upperBound.eq(Infinity)
-        ? result.M_1_2
-        : lowerBound.plus(upperBound).div(2);
-    } else {
-      upperBound = currentGuess;
-      currentGuess = lowerBound.plus(upperBound).div(2);
-    }
-
+    currentGuess = result.M_1_2;
     result = compute(T, currentGuess, alpha, mag_1, mag_2);
     delta = result.delta.abs();
     results.push({ M_guess: currentGuess, ...result });

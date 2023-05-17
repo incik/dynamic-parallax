@@ -1,6 +1,5 @@
 import { bignumber, BigNumber, format } from "mathjs";
 import { FC } from "react";
-import { Heading } from "./Heading";
 import { Period } from "./Period";
 
 export type ObservationsFormProps = {
