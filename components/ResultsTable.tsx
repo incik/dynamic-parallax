@@ -1,4 +1,4 @@
-import mathjs, { format } from "mathjs";
+import mathjs, { format, re } from "mathjs";
 import { Symbol } from "./Symbol";
 import { FC, Fragment, ReactNode } from "react";
 import { ComputedValue } from "./ComputedValue";
@@ -113,6 +113,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({
                         value={`${format(result.d_i, {
                           notation: "exponential",
                         })} m`}
+                        extraValue={`= ${result.d_i_pc.toString()} pc`}
                       />
 
                       <ComputedValue
@@ -160,7 +161,11 @@ export const ResultsTable: FC<ResultsTableProps> = ({
                       />
 
                       <ComputedValue
-                        title="Vzdálenost od Země"
+                        title={
+                          <>
+                            Vypočtená hmotnost <strong>primární</strong> složky
+                          </>
+                        }
                         symbol={<Symbol letter="M" index="1" />}
                         value={`${format(result.M_1, {
                           notation: "exponential",
@@ -168,7 +173,12 @@ export const ResultsTable: FC<ResultsTableProps> = ({
                       />
 
                       <ComputedValue
-                        title="Vzdálenost od Země"
+                        title={
+                          <>
+                            Vypočtená hmotnost <strong>sekundární</strong>{" "}
+                            složky
+                          </>
+                        }
                         symbol={<Symbol letter="M" index="2" />}
                         value={`${format(result.M_2, {
                           notation: "exponential",
@@ -176,7 +186,7 @@ export const ResultsTable: FC<ResultsTableProps> = ({
                       />
 
                       <ComputedValue
-                        title="Vzdálenost od Země"
+                        title="Vypočtená hmotnost soustavy"
                         symbol={
                           <>
                             <Symbol letter="M" index="1" /> +
