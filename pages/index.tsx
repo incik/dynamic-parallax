@@ -12,6 +12,7 @@ import { ObservationsForm } from "@/components/ObservationsForm";
 import { ComputeForm } from "@/components/ComputeForm";
 import { Heading } from "@/components/Heading";
 import { Symbol } from "@/components/Symbol";
+import { Period } from "@/components/Period";
 
 const math = create(all, { number: "BigNumber", precision: 6 });
 
@@ -77,8 +78,10 @@ export default function App() {
   return (
     <div className="App bg-base-300">
       <Header />
-      <div className="flex justify-evenly">
-        <div className="w-5/12">
+
+      <div className="container mx-auto flex flex-col lg:flex-row justify-evenly">
+        <div className="flex flex-col lg:w-5/12">
+          <Heading>Pozorování</Heading>
           <ObservationsForm
             a={a}
             b={b}
@@ -92,9 +95,9 @@ export default function App() {
             setmag_1={setmag_1}
             setmag_2={setmag_2}
             setObservedFor={setObservedFor}
+            T={staticData.T}
+            T_years={staticData.T_years}
           />
-        </div>
-        <div className="w-1/2">
           <ComputeForm
             mode={mode}
             setMode={setMode}
@@ -107,35 +110,78 @@ export default function App() {
             mag_2={mag_2}
           />
         </div>
-      </div>
 
-      <div className="flex justify-evenly">
-        <div className="w-5/12">
-          <Heading>
-            Rozdíl odhadnuté a vypočtené <Symbol letter="M" index={"1"} /> +{" "}
-            <Symbol letter="M" index={"2"} />
-          </Heading>
-          <Chart data={results} />
-        </div>
+        <div className="flex flex-col lg:w-6/12">
+          <div className="">
+            <Heading>
+              Rozdíl odhadnuté a vypočtené <Symbol letter="M" index={"1"} /> +{" "}
+              <Symbol letter="M" index={"2"} />
+            </Heading>
+            <div className="card bg-base-100 shadow-sm">
+              <div className="card-body p-3">
+                <Chart data={results} />
+              </div>
+            </div>
+          </div>
 
-        <div>
-          <Heading>Iterace výpočtů</Heading>
-          <div className="flex justify-evenly flex-wrap w-11/12">
-            {results.map((result, index) => {
-              const finished =
-                (math.compare(result.delta.abs(), 1) as number) <= 0;
+          <div>
+            <Heading>Iterace výpočtů</Heading>
 
-              return (
-                <IterationCard
-                  key={index}
-                  index={index}
-                  finished={finished}
-                  iteration={result}
-                  expanded={expandedCard === index}
-                  expandToggle={(index) => setExpandedCard(index)}
-                />
-              );
-            })}
+            <table className="table table-compact w-full">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>
+                    Odhad <Symbol letter="M" index="1" /> +{" "}
+                    <Symbol letter="M" index="2" />
+                  </th>
+                  <th>
+                    Vypočtené <Symbol letter="M" index="1" /> +{" "}
+                    <Symbol letter="M" index="2" />
+                  </th>
+                  <th>&delta;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {results.map((result, index) => {
+                  const finished =
+                    (math.compare(result.delta.abs(), 1) as number) <= 0;
+
+                  return (
+                    <tr key={index} className={finished ? "text-primary" : ""}>
+                      <th>{index}</th>
+                      <td>{result.M_guess.toString()} kg</td>
+                      <td>{result.M_1_2.toString()} kg</td>
+                      <td
+                        className={
+                          finished ? "bg-primary text-primary-content" : ""
+                        }
+                      >
+                        {result.delta.abs().toString()}%
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <div className="flex justify-evenly flex-wrap w-11/12">
+              {results.map((result, index) => {
+                const finished =
+                  (math.compare(result.delta.abs(), 1) as number) <= 0;
+
+                return (
+                  <IterationCard
+                    key={index}
+                    index={index}
+                    finished={finished}
+                    iteration={result}
+                    expanded={expandedCard === index}
+                    expandToggle={(index) => setExpandedCard(index)}
+                  />
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

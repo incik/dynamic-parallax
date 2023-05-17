@@ -156,12 +156,14 @@ export const IterationCard: FC<ResultRecordProps> = ({
                     Vypočtená hmotnost <strong>sekundární</strong> složky
                   </div>
                 </div>
+              </div>
+              <div className="stats shadow">
                 <div className="stat">
                   <div className="stat-title">
                     <Symbol letter="M" index="1" /> +{" "}
                     <Symbol letter="M" index="2" />
                   </div>
-                  <div className="stat-value text-lg">
+                  <div className="stat-value text-lg text-primary">
                     {format(iteration.M_1_2, {
                       notation: "exponential",
                     })}{" "}
