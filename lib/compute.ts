@@ -20,7 +20,9 @@ export const computeStatic = (
   b: BigNumber,
   observedFor: number
 ) => {
+  // h = e = sqrt(a^2 - b^2)
   const h = math.round(sqrt(a.pow(2).minus(b.pow(2))), 4); // excentricity
+  // epsilon = a * b * (acos(h / a) - (h / a^2) * sqrt(a^2 - h^2))
   const epsilon = math.round(
     a
       .times(b)
@@ -34,8 +36,10 @@ export const computeStatic = (
     4
   );
 
+  // S = pi * a * b
   const S = math.round(bignumber(Math.PI).times(a).times(b), 4);
 
+  // T = S * observedFor / epsilon
   const T_years = math.round(S.times(observedFor).div(epsilon), 4); // years!
   const T = T_years.times(365.25).times(24).times(60).times(60); // seconds
 

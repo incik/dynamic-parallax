@@ -8,13 +8,11 @@ export type PeriodProps = {
 
 export const Period: FC<PeriodProps> = ({ T, T_years }) => {
   return (
-    <div className="card ml-1 bg-base-200 shadow-sm">
+    <div className="card ml-1 text-success-content bg-success bg-opacity-20 shadow-sm">
       <div className="card-body p-3">
-        <div className="stat-title">Perioda</div>
-        <div className="stat-value text-lg text-secondary">
-          {T_years.toString()} let
-        </div>
-        <div className="stat-desc">
+        <div className="stat-title text-success-content">Perioda</div>
+        <div className="stat-value text-lg">{T_years.toString()} let</div>
+        <div className="stat-desc text-success-content">
           <span className="normal text-md">{T.toString()} s</span>
         </div>
       </div>
