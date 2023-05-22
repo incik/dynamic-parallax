@@ -12,7 +12,11 @@ The app calculates the physical properities of the observed binary star systems 
 
 Each calculation transports you millions of light years away, turning the abstract into reality 😉
 
+What are you waiting for? [SEE IT IN ACTION](http://dynamic-parallax.vercel.app)!
+
 The core of the logic is in [lib/compute.ts](https://github.com/incik/dynamic-parallax/blob/main/lib/compute.ts) file.  You may wonder how JavaScript/TypeScript, traditionally limited in handling very large numbers, could deliver such a performance. That' why [math.js](https://mathjs.org/) library was used.It overcomes the hurdles of JavaScript/TypeScript (such as floating point arithmetic errors), ensuring that our stargazing quest remains unhindered.
+
+Please note that you can switch to **dark mode** and save your eyes from the searing white glow of the screen, transforming your cosmic journey into a soothing, night-sky friendly exploration. 👁️🔭🌟
 
 ![app](https://github.com/incik/dynamic-parallax/assets/303200/eff7fcbb-b5b1-4641-9cb7-8c1f6fa4cf94)
 
