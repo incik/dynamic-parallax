@@ -1,4 +1,4 @@
-import { bignumber, BigNumber, format } from "mathjs";
+import { bignumber, BigNumber, format, max } from "mathjs";
 import { FC } from "react";
 import { Period } from "./Period";
 
@@ -51,7 +51,7 @@ export const ObservationsForm: FC<ObservationsFormProps> = ({
                 type="number"
                 step="0.1"
                 placeholder="0.01"
-                min={b.toString()}
+                min={max(0.1, b).toString()}
                 className="input input-bordered w-24"
                 onChange={(e) => {
                   setA(bignumber(e.target.value));
@@ -91,6 +91,7 @@ export const ObservationsForm: FC<ObservationsFormProps> = ({
                 type="number"
                 step="0.1"
                 placeholder="0.01"
+                min={0.1}
                 max={a.toString()}
                 className="input input-bordered w-24"
                 onChange={(e) => {
